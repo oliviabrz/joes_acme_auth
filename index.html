@@ -60,8 +60,11 @@
                 this.setState({ auth: {} });
             }
             async attemptTokenLogin() {
+                // We are getting a possible id of a user from localStorage
                 const token = window.localStorage.getItem('token');
                 if (token) {
+                    // Request sent to server.
+                    // Trying to get back more information about who they are.
                     const response = await axios.get('/api/auth', {
                         headers: {
                             authorization: token
@@ -76,6 +79,7 @@
             async signIn(credentials) {
                 let response = await axios.post('/api/auth', credentials);
                 const { token } = response.data;
+                // const token = response.data.token;
                 window.localStorage.setItem('token', token);
                 this.attemptTokenLogin();
             }

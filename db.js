@@ -25,6 +25,7 @@ User.byToken = async (token) => {
         throw error;
     }
     catch (ex) {
+        console.log(ex);
         const error = Error('bad credentials');
         error.status = 401;
         throw error;
@@ -32,6 +33,8 @@ User.byToken = async (token) => {
 };
 
 User.authenticate = async ({ username, password }) => {
+    // username = lucy
+    // password = lucy_pws
     const user = await User.findOne({
         where: {
             username,
@@ -39,7 +42,7 @@ User.authenticate = async ({ username, password }) => {
         }
     });
     if (user) {
-        return user.id;
+        return user.id; // token
     }
     const error = Error('bad credentials');
     error.status = 401;

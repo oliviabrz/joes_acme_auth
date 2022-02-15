@@ -7,6 +7,7 @@ const path = require('path');
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
 app.post('/api/auth', async (req, res, next) => {
+    // req.body = { username: "lucy", password: "lucy_pw" }
     try {
         res.send({ token: await User.authenticate(req.body) });
     }
