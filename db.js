@@ -9,7 +9,7 @@ const config = {
 if (process.env.LOGGING) {
     delete config.logging;
 }
-const conn = new Sequelize(process.env.DATABASE_URL || 'postgres://joe-alves:buttons@localhost/acme_db', config);
+const conn = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost/acme_db', config);
 
 const User = conn.define('user', {
     username: STRING,
