@@ -15,9 +15,11 @@ const User = conn.define('user', {
     password: STRING
 });
 
+const secretSigningPhrase = process.env.AUTH_JWT_SECRET;
+
 User.byToken = async (token) => {
     try {
-        const unscrambledToken = jwt.verify(token, "brogle");
+        const unscrambledToken = jwt.verify(token, secretSigningPhrase);
         const user = await User.findByPk(unscrambledToken.userId);
         if (user) {
             return user;
@@ -44,7 +46,7 @@ User.authenticate = async ({ username, password }) => {
         }
     });
     if (user) {
-        const newToken = jwt.sign({ userId: user.id }, "brogle");
+        const newToken = jwt.sign({ userId: user.id }, secretSigningPhrase);
         return newToken; // token
     }
     const error = Error('bad credentials');
