@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const Sequelize = require('sequelize');
 const { STRING } = Sequelize;
 const config = {
@@ -16,7 +17,8 @@ const User = conn.define('user', {
 
 User.byToken = async (token) => {
     try {
-        const user = await User.findByPk(token);
+        const unscrambledToken = jwt.verify(token, "brogle");
+        const user = await User.findByPk(unscrambledToken.userId);
         if (user) {
             return user;
         }
@@ -42,7 +44,8 @@ User.authenticate = async ({ username, password }) => {
         }
     });
     if (user) {
-        return user.id; // token
+        const newToken = jwt.sign({ userId: user.id }, "brogle");
+        return newToken; // token
     }
     const error = Error('bad credentials');
     error.status = 401;
